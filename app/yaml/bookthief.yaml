@@ -1,3 +1,20 @@
+# Create bookthief Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookthief
+  namespace: bookthief
+  labels:
+    app: bookthief
+spec:
+  ports:
+  - port: 14001
+    name: bookthief-port
+  selector:
+    app: bookthief
+
+---
+
 # Create bookthief ServiceAccount
 apiVersion: v1
 kind: ServiceAccount

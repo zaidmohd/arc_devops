@@ -25,6 +25,10 @@ az keyvault certificate import --vault-name $keyVaultName -n $certname -f $certn
 echo "Create Azure Key Vault Kubernetes extension instance"
 az k8s-extension create --name $k8sExtensionName --extension-type Microsoft.AzureKeyVaultSecretsProvider --scope cluster --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --release-train preview --release-namespace kube-system --configuration-settings 'secrets-store-csi-driver.enableSecretRotation=true' 'secrets-store-csi-driver.syncSecret.enabled=true'
 
+# namespaces=('bookstore' 'bookbuyer' 'bookthief' 'bookwarehouse')
+
+for namespace in bookstore bookbuyer bookthief bookwarehouse
+do
 # Create the Kubernetes secret with the service principal credentials
 kubectl create secret generic secrets-store-creds --namespace $namespace --from-literal clientid=${appId} --from-literal clientsecret=${password}
 kubectl --namespace $namespace label secret secrets-store-creds secrets-store.csi.k8s.io/used=true
@@ -111,7 +115,7 @@ spec:
             name: $namespace
             port:
               number: 14001
-        path: /(.*)
+        path: /$namespace
 EOF
 
 # To restrict ingress traffic on backends to authorized clients, 
@@ -123,10 +127,10 @@ cat <<EOF | kubectl apply -n $namespace -f -
 kind: IngressBackend
 apiVersion: policy.openservicemesh.io/v1alpha1
 metadata:
-  name: bookstore
+  name: backend
 spec:
   backends:
-  - name: bookstore
+  - name: $namespace
     port:
       number: 14001
       protocol: http
@@ -135,3 +139,5 @@ spec:
     namespace: ingress-nginx
     name: ingress-nginx-controller
 EOF
+
+done

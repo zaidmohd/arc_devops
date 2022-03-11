@@ -1,3 +1,20 @@
+# Create bookbuyer Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookbuyer
+  namespace: bookbuyer
+  labels:
+    app: bookbuyer
+spec:
+  ports:
+  - port: 14001
+    name: bookbuyer-port
+  selector:
+    app: bookbuyer
+
+---
+
 # Create bookbuyer Service Account
 apiVersion: v1
 kind: ServiceAccount
