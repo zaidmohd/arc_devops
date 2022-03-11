@@ -2,20 +2,21 @@
 #
 
 # Download and install OSM CLI
-system=$(uname -s)
-release=v1.0.0
-curl -L https://github.com/openservicemesh/osm/releases/download/${release}/osm-${release}-${system}-amd64.tar.gz | tar -vxzf -
-./${system}-amd64/osm version
+# system=$(uname -s)
+# release=v1.0.0
+# curl -L https://github.com/openservicemesh/osm/releases/download/${release}/osm-${release}-${system}-amd64.tar.gz | tar -vxzf -
+# ./${system}-amd64/osm version
 
 # Installing Helm 3
-echo "Installing Helm 3"
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
+# echo "Installing Helm 3"
+# curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+# chmod 700 get_helm.sh
+# ./get_helm.sh
 
 # Install NGINX Ingress Controller using HELM
-export ingress_namespace=ingress-nginx 
-export nginx_ingress_service=ingress-nginx-controller
+export ingress_namespace=ingress-nginx # NGINX Ingress Namespace
+export nginx_ingress_service=ingress-nginx-controller # NGINX Ingress Controller Service name
+
 helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
   --namespace $ingress_namespace --create-namespace

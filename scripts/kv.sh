@@ -4,8 +4,6 @@
 export appId='<Your Azure service principal name>'
 export password='<Your Azure service principal password>'
 export tenantId='<Your Azure tenant ID>'
-export keyVaultResourceGroup='rg-zc-learn'
-export keyVaultLocation='<Key Vault Location>'
 export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
 export namespace='bookstore'
