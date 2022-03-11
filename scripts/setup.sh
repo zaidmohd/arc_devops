@@ -2,10 +2,10 @@
 #
 
 # Download and install OSM CLI
-# system=$(uname -s)
-# release=v1.0.0
-# curl -L https://github.com/openservicemesh/osm/releases/download/${release}/osm-${release}-${system}-amd64.tar.gz | tar -vxzf -
-# ./${system}-amd64/osm version
+export release=v1.0.0
+curl -L https://github.com/openservicemesh/osm/releases/download/${release}/osm-${release}-linux-amd64.tar.gz | tar -vxzf -
+
+sudo mv ./linux-amd64/osm /usr/local/bin/osm
 
 # Installing Helm 3
 # echo "Installing Helm 3"
