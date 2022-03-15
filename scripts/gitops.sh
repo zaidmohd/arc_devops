@@ -9,8 +9,6 @@ export tenantId='<Your Azure tenant ID>'
 export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
 export appClonedRepo='https://github.com/zaidmohd/arc_devops'
-# export namespace='hello-arc'
-
 
 # Installing Azure CLI
 echo "Installing Azure CLI"

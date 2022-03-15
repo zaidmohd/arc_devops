@@ -1,37 +1,34 @@
-#
-#
+#!/bin/bash
 
-# Download and install OSM CLI
-export release=v1.0.0
-curl -L https://github.com/openservicemesh/osm/releases/download/${release}/osm-${release}-linux-amd64.tar.gz | tar -vxzf -
+# Setup Cluster - Install NGINX Controller, Download OSM client, Install OSM extension, Add namespace to OSM
 
-sudo mv ./linux-amd64/osm /usr/local/bin/osm
+# <--- Change the following environment variables according to your Azure service principal name --->
+export appId='<Your Azure service principal name>'
+export password='<Your Azure service principal password>'
+export tenantId='<Your Azure tenant ID>'
+export resourceGroup='arc-capi-demo'
+export arcClusterName='arc-capi-demo'
+export osmRelease=v1.0.0
+export osmMeshName='osm'
+export ingressNamespace='ingress-nginx'
 
-# Installing Helm 3
-# echo "Installing Helm 3"
-# curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-# chmod 700 get_helm.sh
-# ./get_helm.sh
+# echo "Login to Az CLI using the service principal"
+# az login --service-principal --username $appId --password $password --tenant $tenantId
 
 # Install NGINX Ingress Controller using HELM
-export ingress_namespace=ingress-nginx # NGINX Ingress Namespace
-export nginx_ingress_service=ingress-nginx-controller # NGINX Ingress Controller Service name
-
 helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
-  --namespace $ingress_namespace --create-namespace
+  --namespace $ingressNamespace --create-namespace
 
-# Install OSM
-export osm_namespace=osm-system # Replace osm-system with the namespace where OSM will be installed
-export osm_mesh_name=osm # Replace osm with the desired OSM mesh name
+# "Download OSM binaries"
+curl -L https://github.com/openservicemesh/osm/releases/download/${release}/osm-${release}-linux-amd64.tar.gz | tar -vxzf -
 
-osm install \
-    --mesh-name "$osm_mesh_name" \
-    --osm-namespace "$osm_namespace" \
-    --set=osm.enablePermissiveTrafficPolicy=true \
-    --set=osm.deployPrometheus=true \
-    --set=osm.deployGrafana=true \
-    --set=osm.deployJaeger=true
+# "Copy the OSM binary to local bin folder"
+sudo cp ./linux-amd64/osm /usr/local/bin/osm
+
+# "Create OSM Kubernetes extension instance"
+# az k8s-extension create --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --extension-type Microsoft.openservicemesh --scope cluster --release-train pilot --name $k8sOSMExtensionName --release-namespace arc-osm-system --version $osmVersion
+az k8s-extension create --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --extension-type Microsoft.openservicemesh --scope cluster --release-train pilot --name osm --version $osmRelease
 
 # To be able to discover the endpoints of this service, we need OSM controller to monitor the corresponding namespace. However, Nginx must NOT be injected with an Envoy sidecar to function properly.
-osm namespace add "$nginx_ingress_namespace" --mesh-name "$osm_mesh_name" --disable-sidecar-injection
+osm namespace add "$nginx_ingress_namespace" --mesh-name "$osmMeshName" --disable-sidecar-injection
