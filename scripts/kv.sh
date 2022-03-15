@@ -7,7 +7,7 @@ export tenantId='<Your Azure tenant ID>'
 export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
 export namespace='bookstore'
-export k8sExtensionName='akvsecretsprovider'
+export k8sKVExtensionName='akvsecretsprovider'
 export keyVaultName='kv-zc-987'
 export host='hello.azurearc.com'
 export certname='ingress-cert'
@@ -23,7 +23,7 @@ echo "Importing the TLS certificate to Key Vault"
 az keyvault certificate import --vault-name $keyVaultName -n $certname -f $certname.pfx
  
 echo "Create Azure Key Vault Kubernetes extension instance"
-az k8s-extension create --name $k8sExtensionName --extension-type Microsoft.AzureKeyVaultSecretsProvider --scope cluster --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --release-train preview --release-namespace kube-system --configuration-settings 'secrets-store-csi-driver.enableSecretRotation=true' 'secrets-store-csi-driver.syncSecret.enabled=true'
+az k8s-extension create --name $k8sKVExtensionName --extension-type Microsoft.AzureKeyVaultSecretsProvider --scope cluster --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --release-train preview --release-namespace kube-system --configuration-settings 'secrets-store-csi-driver.enableSecretRotation=true' 'secrets-store-csi-driver.syncSecret.enabled=true'
 
 # Deploy Secret Provider Class, Sample pod, App pod and Ingress for app namespace (bookstore bookbuyer bookthief)
 for namespace in bookstore bookbuyer bookthief

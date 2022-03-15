@@ -10,27 +10,9 @@ export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
 export appClonedRepo='https://github.com/zaidmohd/arc_devops'
 
-# Installing Azure CLI
-echo "Installing Azure CLI"
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
-# Installing required Azure Arc CLI extensions
-az extension add --name connectedk8s
-az extension add --name k8s-configuration
-
 # Login to Azure
 echo "Log in to Azure with Service Principal"
 az login --service-principal --username $appId --password $password --tenant $tenantId
-
-# Registering Azure Arc providers
-echo "Registering Azure Arc providers"
-az provider register --namespace Microsoft.Kubernetes --wait
-az provider register --namespace Microsoft.KubernetesConfiguration --wait
-az provider register --namespace Microsoft.ExtendedLocation --wait
-
-az provider show -n Microsoft.Kubernetes -o table
-az provider show -n Microsoft.KubernetesConfiguration -o table
-az provider show -n Microsoft.ExtendedLocation -o table
 
 # Create a namespace for your App resources
 kubectl create namespace bookstore
