@@ -18,7 +18,7 @@ openssl pkcs12 -export -in ingress-tls.crt -inkey ingress-tls.key  -out $certnam
 echo "Importing the TLS certificate to Key Vault"
 az keyvault certificate import --vault-name $keyVaultName -n $certname -f $certname.pfx
  
-echo "Create Azure Key Vault Kubernetes extension instance"
+echo "Installing Azure Key Vault Kubernetes extension instance"
 az k8s-extension create --name $k8sKVExtensionName --extension-type Microsoft.AzureKeyVaultSecretsProvider --scope cluster --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --release-train preview --release-namespace kube-system --configuration-settings 'secrets-store-csi-driver.enableSecretRotation=true' 'secrets-store-csi-driver.syncSecret.enabled=true'
 
 # Deploy Secret Provider Class, Sample pod, App pod and Ingress for app namespace (bookstore bookbuyer bookthief)
