@@ -6,14 +6,10 @@ export password='<Your Azure service principal password>'
 export tenantId='<Your Azure tenant ID>'
 export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
-export namespace='bookstore'
 export k8sKVExtensionName='akvsecretsprovider'
 export keyVaultName='kv-zc-987'
 export host='hello.azurearc.com'
 export certname='ingress-cert'
-
-# echo "Login to Az CLI using the service principal"
-# az login --service-principal --username $appId --password $password --tenant $tenantId
 
 echo "Generating a TLS Certificate"
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ingress-tls.key -out ingress-tls.crt -subj "/CN=${host}/O=${host}"
