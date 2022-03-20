@@ -2,9 +2,9 @@
 
 # Assumption - CLI, Provider and extensions installed
 
-##
+#############################
 # - Set Variables / Download OSM Client / Install OSM Extensions / Create Namespaces
-##
+#############################
 
 # <--- Change the following environment variables according to your Azure service principal name --->
 export appId='<Your Azure service principal name>'
@@ -50,12 +50,12 @@ kubectl create namespace bookbuyer
 kubectl create namespace bookthief
 kubectl create namespace bookwarehouse
 
-# Add the new namespaces to the OSM control plane
+# Add the bookstore namespaces to the OSM control plane
 osm namespace add bookstore bookbuyer bookthief bookwarehouse
 
-##
+#############################
 # - Apply GitOps Configs
-##
+#############################
 
 # Create GitOps config for NGINX Ingress Controller
 echo "Creating GitOps config for NGINX Ingress Controller"
@@ -92,9 +92,9 @@ az k8s-configuration flux create \
 --branch main --sync-interval 3s \
 --kustomization name=app path=./app/hello-arc
 
-##
+#############################
 # - Install Key Vault Extension / Create Ingress
-##
+#############################
 
 echo "Generating a TLS Certificate"
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ingress-tls.key -out ingress-tls.crt -subj "/CN=${host}/O=${host}"
