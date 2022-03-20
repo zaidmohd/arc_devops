@@ -9,7 +9,7 @@ spec:
   releaseName: ingress-nginx
   chart:
     spec:
-      chart: ./nginx/charts/ingress-nginx
+      chart: ./nginx/chart
   values:
     controller:
       image:

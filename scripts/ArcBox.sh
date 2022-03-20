@@ -10,6 +10,8 @@
 # export appId='<Your Azure service principal name>'
 # export password='<Your Azure service principal password>'
 # export tenantId='<Your Azure tenant ID>'
+export appId='77bb184f-3091-432a-9a2b-56d79a5b226a'
+export password='u8oKb8-JaayiqNXYvoMavH9C3tq8rw1-5-'
 export tenantId='72f988bf-86f1-41af-91ab-2d7cd011db47'
 export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
