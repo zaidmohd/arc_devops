@@ -7,9 +7,10 @@
 #############################
 
 # <--- Change the following environment variables according to your Azure service principal name --->
-export appId='<Your Azure service principal name>'
-export password='<Your Azure service principal password>'
-export tenantId='<Your Azure tenant ID>'
+# export appId='<Your Azure service principal name>'
+# export password='<Your Azure service principal password>'
+# export tenantId='<Your Azure tenant ID>'
+
 export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
 export osmRelease='v1.0.0'
