@@ -75,7 +75,7 @@ echo "Creating GitOps config"
 az k8s-configuration flux create \
 --cluster-name $arcClusterName \
 --resource-group $resourceGroup \
---name cluster-config \
+--name cluster-config-bookstore \
 --cluster-type connectedClusters \
 --url $appClonedRepo \
 --branch main --sync-interval 3s \
@@ -86,7 +86,7 @@ echo "Creating GitOps config"
 az k8s-configuration flux create \
 --cluster-name $arcClusterName \
 --resource-group $resourceGroup \
---name cluster-config2 \
+--name cluster-config-helloarc \
 --cluster-type connectedClusters \
 --url $appClonedRepo \
 --branch main --sync-interval 3s \
