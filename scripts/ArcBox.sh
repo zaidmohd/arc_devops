@@ -38,9 +38,6 @@ sudo cp ./linux-amd64/osm /usr/local/bin/osm
 # "Create OSM Kubernetes extension instance"
 az k8s-extension create --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --extension-type Microsoft.openservicemesh --scope cluster --release-train pilot --name $osmMeshName
 
-# To be able to discover the endpoints of this service, we need OSM controller to monitor the corresponding namespace. However, Nginx must NOT be injected with an Envoy sidecar to function properly.
-osm namespace add "$ingressNamespace" --mesh-name "$osmMeshName" --disable-sidecar-injection
-
 # Create a namespace for NGINX Ingress resources
 kubectl create namespace $ingressNamespace
 
@@ -55,6 +52,10 @@ kubectl create namespace bookwarehouse
 
 # Add the bookstore namespaces to the OSM control plane
 osm namespace add bookstore bookbuyer bookthief bookwarehouse
+
+# To be able to discover the endpoints of this service, we need OSM controller to monitor the corresponding namespace. However, Nginx must NOT be injected with an Envoy sidecar to function properly.
+osm namespace add "$ingressNamespace" --mesh-name "$osmMeshName" --disable-sidecar-injection
+
 
 #############################
 # - Apply GitOps Configs
