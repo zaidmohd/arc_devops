@@ -7,21 +7,21 @@
 #############################
 
 # <--- Change the following environment variables according to your Azure service principal name --->
-export appId='<Your Azure service principal name>'
-export password='<Your Azure service principal password>'
-export tenantId='<Your Azure tenant ID>'
+# export appId='<Your Azure service principal name>'
+# export password='<Your Azure service principal password>'
+# export tenantId='<Your Azure tenant ID>'
+
+export tenantId='72f988bf-86f1-41af-91ab-2d7cd011db47'
+export appClonedRepo='https://github.com/zaidmohd/arc_devops'
 export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
 export osmRelease='v1.0.0'
 export osmMeshName='osm'
 export ingressNamespace='ingress-nginx'
-# GitOps Variables
-export appClonedRepo='https://github.com/zaidmohd/arc_devops'
-# KV Variables
 export k8sKVExtensionName='akvsecretsprovider'
 export keyVaultName='kv-zc-9871'
-export host='hello.azurearc.com'
 export certname='ingress-cert'
+export host='hello.azurearc.com'
 
 # echo "Login to Az CLI using the service principal"
 az login --service-principal --username $appId --password $password --tenant $tenantId
@@ -42,13 +42,13 @@ kubectl create namespace $ingressNamespace
 kubectl create namespace hello-arc
 
 # Create a namespace for your Bookstore App resources
-kubectl create namespace bookstore
-kubectl create namespace bookbuyer
-kubectl create namespace bookthief
-kubectl create namespace bookwarehouse
+for namespace in bookstore bookbuyer bookthief bookwarehouse bookstore-v2
+do
+kubectl create namespace $namespace
+done
 
 # Add the bookstore namespaces to the OSM control plane
-osm namespace add bookstore bookbuyer bookthief bookwarehouse
+osm namespace add bookstore bookbuyer bookthief bookwarehouse bookstore-v2
 
 # To be able to discover the endpoints of this service, we need OSM controller to monitor the corresponding namespace. However, Nginx must NOT be injected with an Envoy sidecar to function properly.
 osm namespace add "$ingressNamespace" --mesh-name "$osmMeshName" --disable-sidecar-injection
@@ -108,7 +108,7 @@ echo "Installing Azure Key Vault Kubernetes extension instance"
 az k8s-extension create --name $k8sKVExtensionName --extension-type Microsoft.AzureKeyVaultSecretsProvider --scope cluster --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --release-train preview --release-namespace kube-system --configuration-settings 'secrets-store-csi-driver.enableSecretRotation=true' 'secrets-store-csi-driver.syncSecret.enabled=true'
 
 # Deploy Secret Provider Class, Sample pod, App pod and Ingress for app namespace (bookstore bookbuyer bookthief)
-for namespace in bookstore bookbuyer bookthief
+for namespace in bookstore bookbuyer bookthief bookstore-v2
 do
 
 # Create the Kubernetes secret with the service principal credentials
