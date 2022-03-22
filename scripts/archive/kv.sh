@@ -21,8 +21,8 @@ az keyvault certificate import --vault-name $keyVaultName -n $certname -f $certn
 echo "Installing Azure Key Vault Kubernetes extension instance"
 az k8s-extension create --name $k8sKVExtensionName --extension-type Microsoft.AzureKeyVaultSecretsProvider --scope cluster --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --release-train preview --release-namespace kube-system --configuration-settings 'secrets-store-csi-driver.enableSecretRotation=true' 'secrets-store-csi-driver.syncSecret.enabled=true'
 
-# Deploy Secret Provider Class, Sample pod, App pod and Ingress for app namespace (bookstore bookbuyer bookthief)
-for namespace in bookstore bookbuyer bookthief
+# Deploy Secret Provider Class, Sample pod, App pod and Ingress for app namespace (bookstore bookbuyer)
+for namespace in bookstore bookbuyer
 do
 # Create the Kubernetes secret with the service principal credentials
 kubectl create secret generic secrets-store-creds --namespace $namespace --from-literal clientid=${appId} --from-literal clientsecret=${password}
