@@ -40,7 +40,7 @@ kubectl create namespace $ingressNamespace
 kubectl create namespace hello-arc
 
 # Create a namespace for your Bookstore App resources
-for namespace in bookstore bookbuyer bookthief bookwarehouse bookstore-v2
+for namespace in bookstore bookbuyer bookwarehouse bookstore-v2
 do
 kubectl create namespace $namespace
 done
@@ -107,7 +107,7 @@ echo "Installing Azure Key Vault Kubernetes extension instance"
 az k8s-extension create --name $k8sKVExtensionName --extension-type Microsoft.AzureKeyVaultSecretsProvider --scope cluster --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --release-train preview --release-namespace kube-system --configuration-settings 'secrets-store-csi-driver.enableSecretRotation=true' 'secrets-store-csi-driver.syncSecret.enabled=true'
 
 # Deploy Secret Provider Class, Sample pod, App pod and Ingress for app namespace (bookstore bookbuyer bookthief)
-for namespace in bookstore bookbuyer bookthief bookstore-v2
+for namespace in bookstore bookbuyer
 do
 
 # Create the Kubernetes secret with the service principal credentials
@@ -212,6 +212,61 @@ metadata:
 spec:
   backends:
   - name: $namespace
+    port:
+      number: 14001
+      protocol: http
+  sources:
+  - kind: Service
+    namespace: ingress-nginx
+    name: ingress-nginx-controller
+EOF
+
+done
+
+# Create Ingress secret for Bookstore-v2 app
+for namespace in bookstore
+do
+# Deploy an Ingress Resource referencing the Secret created by the CSI driver
+echo "Deploying Ingress Resource"
+cat <<EOF | kubectl apply -n $namespace -f -
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-tls-bookstorev2
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  tls:
+  - hosts:
+    - $host
+    secretName: ingress-tls-csi
+  rules:
+  - host: $host
+    http:
+      paths:
+      - pathType: Prefix
+        backend:
+          service:
+            name: bookstore-v2
+            port:
+              number: 14001
+        path: /bookstore-v2
+EOF
+
+# To restrict ingress traffic on backends to authorized clients, 
+# we will set up the IngressBackend configuration such that only 
+# ingress traffic from the endpoints of the Nginx Ingress Controller 
+# service can route traffic to the service backend.
+
+cat <<EOF | kubectl apply -n $namespace -f -
+kind: IngressBackend
+apiVersion: policy.openservicemesh.io/v1alpha1
+metadata:
+  name: backend
+spec:
+  backends:
+  - name: bookstore-v2
     port:
       number: 14001
       protocol: http
