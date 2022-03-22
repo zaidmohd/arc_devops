@@ -61,7 +61,7 @@ echo "Creating GitOps config for NGINX Ingress Controller"
 az k8s-configuration flux create \
 --cluster-name $arcClusterName \
 --resource-group $resourceGroup \
---name cluster-helm-config-nginx \
+--name config-nginx \
 --namespace $ingressNamespace \
 --cluster-type connectedClusters \
 --scope cluster \
@@ -74,22 +74,22 @@ echo "Creating GitOps config"
 az k8s-configuration flux create \
 --cluster-name $arcClusterName \
 --resource-group $resourceGroup \
---name cluster-config-bookstore \
+--name config-bookstore \
 --cluster-type connectedClusters \
 --url $appClonedRepo \
 --branch main --sync-interval 3s \
---kustomization name=app path=./app/bookstore
+--kustomization name=bookstore path=./app/bookstore
 
 # Create GitOps config for deploy Hello-Arc application
 echo "Creating GitOps config"
 az k8s-configuration flux create \
 --cluster-name $arcClusterName \
 --resource-group $resourceGroup \
---name cluster-config-helloarc \
+--name config-helloarc \
 --cluster-type connectedClusters \
 --url $appClonedRepo \
 --branch main --sync-interval 3s \
---kustomization name=app path=./app/hello-arc
+--kustomization name=helloarc path=./app/hello-arc
 
 
 #############################
