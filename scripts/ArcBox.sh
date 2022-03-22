@@ -10,9 +10,6 @@
 # export appId='<Your Azure service principal name>'
 # export password='<Your Azure service principal password>'
 # export tenantId='<Your Azure tenant ID>'
-export appId='77bb184f-3091-432a-9a2b-56d79a5b226a'
-export password='ivB7Q~p4mbhFjEdBls3KEY3TVmUqdNfd2py28'
-export tenantId='72f988bf-86f1-41af-91ab-2d7cd011db47'
 export appClonedRepo='https://github.com/zaidmohd/arc_devops'
 export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
@@ -36,14 +33,11 @@ sudo cp ./linux-amd64/osm /usr/local/bin/osm
 # "Create OSM Kubernetes extension instance"
 az k8s-extension create --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --extension-type Microsoft.openservicemesh --scope cluster --release-train pilot --name $osmMeshName
 
-# Create a namespace for NGINX Ingress resources
+# Create namespace for NGINX Ingress Controller
 kubectl create namespace $ingressNamespace
 
-# Create a namespace for your Hello-Arc App resources
-kubectl create namespace hello-arc
-
-# Create a namespace for your Bookstore App resources
-for namespace in bookstore bookbuyer bookwarehouse bookstore-v2
+# Create namespaces for your App resources
+for namespace in bookstore bookbuyer bookwarehouse hello-arc
 do
 kubectl create namespace $namespace
 done
