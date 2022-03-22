@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: bookstore-v2
-  namespace: bookstore
+  namespace: bookstore-v2
   labels:
     app: bookstore-v2
 spec:
@@ -20,7 +20,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bookstore-v2
-  namespace: bookstore
+  namespace: bookstore-v2
 
 ---
 
@@ -29,7 +29,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bookstore-v2
-  namespace: bookstore
+  namespace: bookstore-v2
 spec:
   replicas: 1
   selector:
@@ -65,12 +65,12 @@ kind: TrafficTarget
 apiVersion: access.smi-spec.io/v1alpha3
 metadata:
   name: bookstore-v2
-  namespace: bookstore
+  namespace: bookstore-v2
 spec:
   destination:
     kind: ServiceAccount
     name: bookstore-v2
-    namespace: bookstore
+    namespace: bookstore-v2
   rules:
   - kind: HTTPRouteGroup
     name: bookstore-service-routes

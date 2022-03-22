@@ -5,4 +5,4 @@ curl -v -k --resolve hello.azurearc.com:443$IngressIP https://hello.azurearc.com
 curl -v -k --resolve hello.azurearc.com:443:$IngressIP https://hello.azurearc.com/bookbyuer
 curl -v -k --resolve hello.azurearc.com:443:$IngressIP https://hello.azurearc.com/bookstore
 curl -v http://$IngressIP
-kubectl -n bookbuyer logs bookbuyer-84dcd9c6dd-pfpjn bookbuyer -f | grep Identity:
+kubectl -n bookbuyer logs bookbuyer-84dcd9c6dd-27kxw bookbuyer -f | grep Identity:
