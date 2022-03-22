@@ -10,8 +10,6 @@
 # export appId='<Your Azure service principal name>'
 # export password='<Your Azure service principal password>'
 # export tenantId='<Your Azure tenant ID>'
-
-export tenantId='72f988bf-86f1-41af-91ab-2d7cd011db47'
 export appClonedRepo='https://github.com/zaidmohd/arc_devops'
 export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
@@ -92,6 +90,7 @@ az k8s-configuration flux create \
 --url $appClonedRepo \
 --branch main --sync-interval 3s \
 --kustomization name=app path=./app/hello-arc
+
 
 #############################
 # - Install Key Vault Extension / Create Ingress
