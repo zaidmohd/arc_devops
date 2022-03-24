@@ -1,3 +1,16 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: data
+  labels:
+    kubernetes.io/cluster-service: "true"
+provisioner: kubernetes.io/azure-disk
+parameters:
+  kind: Managed
+  storageaccounttype: Premium_LRS
+  cachingmode: ReadOnly
+volumeBindingMode: WaitForFirstConsumer
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -65,7 +78,7 @@ spec:
       name: data
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "managed-premium"
+      storageClassName: "data"
       resources:
         requests:
           storage: 250M

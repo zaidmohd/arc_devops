@@ -16,6 +16,7 @@ export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
 export osmRelease='v1.0.0'
 export osmMeshName='osm'
+export bookstoreNamespace='bookstore'
 export ingressNamespace='ingress-nginx'
 export k8sKVExtensionName='akvsecretsprovider'
 export keyVaultName='kv-zc-9871'
@@ -34,11 +35,8 @@ sudo cp ./linux-amd64/osm /usr/local/bin/osm
 # "Create OSM Kubernetes extension instance"
 az k8s-extension create --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --extension-type Microsoft.openservicemesh --scope cluster --release-train pilot --name $osmMeshName
 
-# Create namespace for NGINX Ingress Controller
-kubectl create namespace $ingressNamespace
-
-# Create namespaces for your App resources
-for namespace in bookstore bookbuyer bookwarehouse hello-arc
+# Create namespaces for your resources
+for namespace in bookstore bookbuyer bookwarehouse hello-arc ingress-nginx
 do
 kubectl create namespace $namespace
 done
@@ -73,7 +71,9 @@ az k8s-configuration flux create \
 --cluster-name $arcClusterName \
 --resource-group $resourceGroup \
 --name config-bookstore \
+--namespace $bookstoreNamespace \
 --cluster-type connectedClusters \
+--scope namespace \
 --url $appClonedRepo \
 --branch main --sync-interval 3s \
 --kustomization name=bookstore path=./app/bookstore
