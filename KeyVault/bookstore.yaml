@@ -88,17 +88,6 @@ spec:
     port:
       number: 14001
       protocol: http
-  sources:
-  - kind: Service
-    namespace: ingress-nginx
-    name: ingress-nginx-controller
----
-kind: IngressBackend               # Ingress Backend for Bookstore V2 App
-apiVersion: policy.openservicemesh.io/v1alpha1
-metadata:
-  name: backend-bookstore-v2
-spec:
-  backends:
   - name: bookstore-v2
     port:
       number: 14001
