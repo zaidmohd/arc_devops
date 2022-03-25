@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - resources/pod.yaml
+patchesStrategicMerge:
+- patches/Ingress.yaml
+- patches/IngressBackendOSM.yaml
+- patches/Namespace.yaml
+- patches/SecretProviderClass.yaml
