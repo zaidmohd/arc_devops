@@ -7,9 +7,9 @@
 #############################
 
 # <--- Change the following environment variables according to your Azure service principal name --->
-# export appId='<Your Azure service principal name>'
-# export password='<Your Azure service principal password>'
-# export tenantId='<Your Azure tenant ID>'
+export appId='<Your Azure service principal name>'
+export password='<Your Azure service principal password>'
+export tenantId='<Your Azure tenant ID>'
 export appClonedRepo='https://github.com/zaidmohd/arc_devops'
 export resourceGroup='arc-capi-demo'
 export arcClusterName='arc-capi-demo'
@@ -18,7 +18,7 @@ export osmMeshName='osm'
 export ingressNamespace='ingress-nginx'
 export keyVaultName='kv-zc-9871'
 export certname='ingress-cert'
-export host='hello.azurearc.com'
+export host='devops.arcbox.com'
 
 # echo "Login to Az CLI using the service principal"
 az login --service-principal --username $appId --password $password --tenant $tenantId
