@@ -85,7 +85,7 @@ az k8s-configuration flux create \
 --namespace bookstore \
 --url $appClonedRepo \
 --branch main --sync-interval 3s \
---kustomization name=bookstore path=./k8s-rbac-sample/namespace
+--kustomization name=bookstore path=./bookstore/rbac-sample
 
 # Create GitOps config for Bookstore Traffic Split
 echo "Creating GitOps config for Bookstore Traffic Split"
