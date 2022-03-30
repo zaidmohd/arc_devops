@@ -7,18 +7,18 @@
 #############################
 
 # <--- Change the following environment variables according to your Azure service principal name --->
-# export appId='<Your Azure service principal name>'
-# export password='<Your Azure service principal password>'
-# export tenantId='<Your Azure tenant ID>'
-export appClonedRepo='https://github.com/zaidmohd/arc_devops'
-export resourceGroup='arc-capi-demo'
-export arcClusterName='arc-capi-demo'
+export appId='<Your Azure service principal name>'
+export password='<Your Azure service principal password>'
+export tenantId='<Your Azure tenant ID>'
+export appClonedRepo='https://github.com/zaidmohd/azure-arc-jumpstart-apps'
+export resourceGroup='ArcBoxDevOps'
+export arcClusterName='ArcBox-CAPI-Data'
 export osmRelease='v1.0.0'
 export osmMeshName='osm'
 export ingressNamespace='ingress-nginx'
 export keyVaultName='kv-zc-9871'
 export certname='ingress-cert'
-export host='hello.azurearc.com'
+export host='arcbox.devops.com'
 
 # echo "Login to Az CLI using the service principal"
 az login --service-principal --username $appId --password $password --tenant $tenantId
@@ -64,7 +64,7 @@ az k8s-configuration flux create \
 --kustomization name=nginx path=./nginx/release
 
 # Create GitOps config for Bookstore application
-echo "Creating GitOps config"
+echo "Creating GitOps config for Bookstore application"
 az k8s-configuration flux create \
 --cluster-name $arcClusterName \
 --resource-group $resourceGroup \
@@ -72,10 +72,36 @@ az k8s-configuration flux create \
 --cluster-type connectedClusters \
 --url $appClonedRepo \
 --branch main --sync-interval 3s \
---kustomization name=bookstore path=./app/bookstore
+--kustomization name=bookstore path=./bookstore/yaml
 
-# Create GitOps config for deploy Hello-Arc application
-echo "Creating GitOps config"
+# Create GitOps config for Bookstore RBAC
+echo "Creating GitOps config for Bookstore RBAC"
+az k8s-configuration flux create \
+--cluster-name $arcClusterName \
+--resource-group $resourceGroup \
+--name config-bookstore \
+--cluster-type connectedClusters \
+--scope namespace \
+--namespace bookstore \
+--url $appClonedRepo \
+--branch main --sync-interval 3s \
+--kustomization name=bookstore path=./k8s-rbac-sample
+
+# Create GitOps config for Bookstore Traffic Split
+echo "Creating GitOps config for Bookstore Traffic Split"
+az k8s-configuration flux create \
+--cluster-name $arcClusterName \
+--resource-group $resourceGroup \
+--name config-bookstore \
+--cluster-type connectedClusters \
+--scope namespace \
+--namespace bookstore \
+--url $appClonedRepo \
+--branch main --sync-interval 3s \
+--kustomization name=bookstore path=./bookstore/osm-sample
+
+# Create GitOps config for Hello-Arc application
+echo "Creating GitOps config for Hello-Arc application"
 az k8s-configuration flux create \
 --cluster-name $arcClusterName \
 --resource-group $resourceGroup \
@@ -88,9 +114,9 @@ az k8s-configuration flux create \
 --kustomization name=helloarc path=./app/hello-arc
 
 
-#############################
+################################################
 # - Install Key Vault Extension / Create Ingress
-#############################
+################################################
 
 echo "Generating a TLS Certificate"
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ingress-tls.key -out ingress-tls.crt -subj "/CN=${host}/O=${host}"
