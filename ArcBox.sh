@@ -79,20 +79,20 @@ echo "Creating GitOps config for Bookstore RBAC"
 az k8s-configuration flux create \
 --cluster-name $arcClusterName \
 --resource-group $resourceGroup \
---name config-bookstore \
+--name config-bookstore-rbac \
 --cluster-type connectedClusters \
 --scope namespace \
 --namespace bookstore \
 --url $appClonedRepo \
 --branch main --sync-interval 3s \
---kustomization name=bookstore path=./k8s-rbac-sample
+--kustomization name=bookstore path=./k8s-rbac-sample/namespace
 
 # Create GitOps config for Bookstore Traffic Split
 echo "Creating GitOps config for Bookstore Traffic Split"
 az k8s-configuration flux create \
 --cluster-name $arcClusterName \
 --resource-group $resourceGroup \
---name config-bookstore \
+--name config-bookstore-osm \
 --cluster-type connectedClusters \
 --scope namespace \
 --namespace bookstore \
@@ -111,7 +111,7 @@ az k8s-configuration flux create \
 --scope namespace \
 --url $appClonedRepo \
 --branch main --sync-interval 3s \
---kustomization name=helloarc path=./app/hello-arc
+--kustomization name=helloarc path=./hello-arc/yaml
 
 
 ################################################
