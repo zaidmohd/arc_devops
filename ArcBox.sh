@@ -129,10 +129,10 @@ echo "Installing Azure Key Vault Kubernetes extension instance"
 az k8s-extension create --name 'akvsecretsprovider' --extension-type Microsoft.AzureKeyVaultSecretsProvider --scope cluster --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --release-train preview --release-namespace kube-system --configuration-settings 'secrets-store-csi-driver.enableSecretRotation=true' 'secrets-store-csi-driver.syncSecret.enabled=true'
 
 # Replace Variable values
-sed -i "s/{CERTNAME}/$certname/" KeyVault/*
-sed -i "s/{KEYVAULTNAME}/$keyVaultName/" KeyVault/*
-sed -i "s/{HOST}/$host/" KeyVault/*
-sed -i "s/{TENANTID}/$tenantId/" KeyVault/*
+sed -i "s/{JS_CERTNAME}/$certname/" KeyVault/*
+sed -i "s/{JS_KEYVAULTNAME}/$keyVaultName/" KeyVault/*
+sed -i "s/{JS_HOST}/$host/" KeyVault/*
+sed -i "s/{JS_TENANTID}/$tenantId/" KeyVault/*
 
 # Deploy Ingress resources for Bookstore and Hello-Arc App
 for namespace in bookstore bookbuyer hello-arc

@@ -8,19 +8,19 @@ spec:
   - secretName: ingress-tls-csi
     type: kubernetes.io/tls
     data: 
-    - objectName: {CERTNAME}
+    - objectName: {JS_CERTNAME}
       key: tls.key
-    - objectName: {CERTNAME}
+    - objectName: {JS_CERTNAME}
       key: tls.crt
   parameters:
     usePodIdentity: "false"
-    keyvaultName: {KEYVAULTNAME}                        
+    keyvaultName: {JS_KEYVAULTNAME}                        
     objects: |
       array:
         - |
-          objectName: {CERTNAME}
+          objectName: {JS_CERTNAME}
           objectType: secret
-    tenantId: {TENANTID}           
+    tenantId: {JS_TENANTID}           
 ---
 apiVersion: v1
 kind: Pod
@@ -53,14 +53,14 @@ metadata:
   name: ingress-tls
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   tls:
   - hosts:
-    - {HOST}
+    - {JS_HOST}
     secretName: ingress-tls-csi
   rules:
-  - host: {HOST}
+  - host: {JS_HOST}
     http:
       paths:
       - pathType: ImplementationSpecific
@@ -69,4 +69,3 @@ spec:
             name: hello-arc
             port:
               number: 8080
-        path: /hello-arc

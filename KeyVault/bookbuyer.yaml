@@ -8,19 +8,19 @@ spec:
   - secretName: ingress-tls-csi
     type: kubernetes.io/tls
     data: 
-    - objectName: {CERTNAME}
+    - objectName: {JS_CERTNAME}
       key: tls.key
-    - objectName: {CERTNAME}
+    - objectName: {JS_CERTNAME}
       key: tls.crt
   parameters:
     usePodIdentity: "false"
-    keyvaultName: {KEYVAULTNAME}                        
+    keyvaultName: {JS_KEYVAULTNAME}                        
     objects: |
       array:
         - |
-          objectName: {CERTNAME}
+          objectName: {JS_CERTNAME}
           objectType: secret
-    tenantId: {TENANTID}           
+    tenantId: {JS_TENANTID}           
 ---
 apiVersion: v1
 kind: Pod
@@ -57,10 +57,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - {HOST}
+    - {JS_HOST}
     secretName: ingress-tls-csi
   rules:
-  - host: {HOST}
+  - host: {JS_HOST}
     http:
       paths:
       - pathType: ImplementationSpecific
