@@ -13,6 +13,10 @@ export host='arcbox.k3sdevops.com'
 export k3sNamespace='hello-arc'
 export ingressNamespace='ingress-nginx'
 
+# <Placeholder>
+# Need to connect to K3s Cluster
+#
+
 # echo "Login to Az CLI using the service principal"
 az login --service-principal --username $appId --password $password --tenant $tenantId
 
