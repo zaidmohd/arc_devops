@@ -14,8 +14,8 @@ export k3sNamespace='hello-arc'
 export ingressNamespace='ingress-nginx'
 
 # <Placeholder>
-# Need to connect to K3s Cluster
-#
+# Connect to K3s Cluster
+# kubectl config set-context arcboxk3s
 
 # echo "Login to Az CLI using the service principal"
 az login --service-principal --username $appId --password $password --tenant $tenantId
@@ -65,8 +65,8 @@ openssl pkcs12 -export -in ingress-tls.crt -inkey ingress-tls.key  -out $k3sCert
 
 # <Placeholder>
 # Checking if Ingress Controller is ready and create Host file entry
-until kubectl get service/ingress-nginx-controller --namespace $ingressNamespace --output=jsonpath='{.status.loadBalancer}' | grep "ingress"; do echo "Waiting for NGINX Ingress controller external IP..." && sleep 20 ; done
-
+# until kubectl get service/ingress-nginx-controller --namespace $ingressNamespace --output=jsonpath='{.status.loadBalancer}' | grep "ingress"; do echo "Waiting for NGINX Ingress controller external IP..." && sleep 20 ; done
+# kubectl get service/ingress-nginx-controller --namespace $ingressNamespace --output=jsonpath='{.status.loadBalancer.}' 
 
 echo "Importing the TLS certificate to Key Vault"
 az keyvault certificate import --vault-name $keyVaultName -n $k3sCertName -f $k3sCertName.pfx
