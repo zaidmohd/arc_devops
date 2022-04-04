@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Assumption - CLI, Provider and extensions installed
-
-#############################
-# - Set Variables / Download OSM Client / Install OSM Extensions / Create Namespaces
-#############################
-
 # <--- Change the following environment variables according to your Azure service principal name --->
 export appId='<Your Azure service principal name>'
 export password='<Your Azure service principal password>'
@@ -121,7 +115,11 @@ az k8s-configuration flux create \
 echo "Generating a TLS Certificate"
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ingress-tls.key -out ingress-tls.crt -subj "/CN=${host}/O=${host}"
 openssl pkcs12 -export -in ingress-tls.crt -inkey ingress-tls.key  -out $certname.pfx -passout pass:
- 
+
+# <Placeholder>
+# Need to add command to install this certificate on the ArcBox Client VM
+#
+
 echo "Importing the TLS certificate to Key Vault"
 az keyvault certificate import --vault-name $keyVaultName -n $certname -f $certname.pfx
  
