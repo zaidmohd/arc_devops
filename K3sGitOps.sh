@@ -74,9 +74,6 @@ az keyvault certificate import --vault-name $keyVaultName -n $k3sCertName -f $k3
 echo "Installing Azure Key Vault Kubernetes extension instance"
 az k8s-extension create --name 'akvsecretsprovider' --extension-type Microsoft.AzureKeyVaultSecretsProvider --scope cluster --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --release-train preview --release-namespace kube-system --configuration-settings 'secrets-store-csi-driver.enableSecretRotation=true' 'secrets-store-csi-driver.syncSecret.enabled=true'
 
-# Create a namespace for your workload resources
-kubectl create ns $k3sNamespace
-
 # Create the Kubernetes secret with the service principal credentials
 kubectl create secret generic secrets-store-creds --namespace $k3sNamespace --from-literal clientid=${appId} --from-literal clientsecret=${password}
 kubectl --namespace $k3sNamespace label secret secrets-store-creds secrets-store.csi.k8s.io/used=true
