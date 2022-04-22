@@ -5,8 +5,8 @@ export appId='<Your Azure service principal name>'
 export password='<Your Azure service principal password>'
 export tenantId='<Your Azure tenant ID>'
 export appClonedRepo='https://github.com/zaidmohd/azure-arc-jumpstart-apps'
-export resourceGroup='ArcBoxDevOps'
-export arcClusterName='ArcBox-CAPI-Data'
+export resourceGroup='arc-capi-demo'
+export arcClusterName='arc-capi-demo'
 export osmRelease='v1.0.0'
 export osmMeshName='osm'
 export ingressNamespace='ingress-nginx'
@@ -24,7 +24,7 @@ curl -L https://github.com/openservicemesh/osm/releases/download/${osmRelease}/o
 sudo cp ./linux-amd64/osm /usr/local/bin/osm
 
 # "Create OSM Kubernetes extension instance"
-az k8s-extension create --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --extension-type Microsoft.openservicemesh --scope cluster --release-train pilot --name $osmMeshName
+az k8s-extension create --cluster-name $arcClusterName --resource-group $resourceGroup --cluster-type connectedClusters --extension-type Microsoft.openservicemesh --scope cluster --name $osmMeshName
 
 # Create Kubernetes Namespaces
 for namespace in bookstore bookbuyer bookwarehouse hello-arc ingress-nginx
