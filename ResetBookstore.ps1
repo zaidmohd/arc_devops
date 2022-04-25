@@ -2,7 +2,7 @@ $Env:ArcBoxLogsDir = "C:\ArcBox\Logs"
 
 $certdns = "arcbox.devops.com"
 
-Start-Transcript -Path $Env:ArcBoxLogsDir\ResetBookstoreCounter.log
+Start-Transcript -Path $Env:ArcBoxLogsDir\ResetBookstore.log
 
 ############################
 # - Deploy Ingress for Reset
